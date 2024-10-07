@@ -4,15 +4,17 @@
 
 ## 安装realm
 
-wget -O realm.tar.gz https://github.com/zhboner/realm/releases/download/v2.4.5/realm-x86_64-unknown-linux-gnu.tar.gz
+    wget -O realm.tar.gz https://github.com/zhboner/realm/releases/download/v2.4.5/realm-x86_64-unknown-linux-gnu.tar.gz
 
-tar -xvf realm.tar.gz
+    tar -xvf realm.tar.gz
 
-chmod +x realm
+    chmod +x realm
 
 由于github没有ipv4，可以在 https://github.akams.cn/ 寻找代理，举例
-https://gh.llkk.cc/https://github.com/zhboner/realm/releases/download/v2.4.5/realm-x86_64-unknown-linux-gnu.tar.gz
-https://github.moeyy.xyz/https://github.com/zhboner/realm/releases/download/v2.4.5/realm-x86_64-unknown-linux-gnu.tar.gz
+
+https://gh.llkk.cc/
+
+https://github.moeyy.xyz/
 
 ## realm配置文件
 
@@ -20,29 +22,29 @@ https://github.moeyy.xyz/https://github.com/zhboner/realm/releases/download/v2.4
 
 nano基本用法：在输入完成之后，ctrl+o保存文件，然后ctrl+x返回，下文同
 
-nano config.toml
+`nano config.toml`
 
 在 config.toml 文件中粘贴内容
 
-[log]
-level = "warn"
-output = "/root/realm.log"
- 
-[[endpoints]]
-listen = "[::]:11111"
-remote = "[2606:4700:9a95::5de7:d53]:443"
- 
-[[endpoints]]
-listen = "[::]:22222"
-remote = "[2a06:98c1:3121::f36:2c1e]:443"
-
-[[endpoints]]
-listen = "[::]:33333"
-remote = "[2606:4700:e2::132:41be]:443"
-
-[[endpoints]]
-listen = "0.0.0.0:44444"
-remote = "162.159.140.120:443"
+    [log]
+    level = "warn"
+    output = "/root/realm.log"
+    
+    [[endpoints]]
+    listen = "[::]:11111"
+    remote = "[2a06:98c1:56::3d29:51ac]:443"
+    
+    [[endpoints]]
+    listen = "[::]:22222"
+    remote = "[2a06:98c1:3121::3200:1551]:443"
+    
+    [[endpoints]]
+    listen = "[::]:33333"
+    remote = "[2606:4700:a::122f:267a]:443"
+    
+    [[endpoints]]
+    listen = "0.0.0.0:44444"
+    remote = "162.159.140.120:443"
 
 
 listen代表监听本机，remote代表落地机
@@ -56,25 +58,25 @@ listen代表监听本机，remote代表落地机
 因为手动每次运行很麻烦，我们需要创建 Linux 的服务项来实现自启动转发通道。
 举例创建 service 服务项，首先使用 nano 编辑服务项内容：
 
-nano /etc/systemd/system/realm.service
+    nano /etc/systemd/system/realm.service
 
 如果你的 realm 主程序和配置文件都和我一样在 /root 目录里的话，直接使用下面的内容即可
 
-[Unit]
-Description=realm
-After=network-online.target
-Wants=network-online.target systemd-networkd-wait-online.service
- 
-[Service]
-Type=simple
-User=root
-Restart=on-failure
-RestartSec=5s
-DynamicUser=true
-ExecStart=/root/realm -c /root/config.toml
- 
-[Install]
-WantedBy=multi-user.target
+    [Unit]
+    Description=realm
+    After=network-online.target
+    Wants=network-online.target systemd-networkd-wait-online.service
+     
+    [Service]
+    Type=simple
+    User=root
+    Restart=on-failure
+    RestartSec=5s
+    DynamicUser=true
+    ExecStart=/root/realm -c /root/config.toml
+     
+    [Install]
+    WantedBy=multi-user.target
 
 
 然后保存文件就可以了
@@ -82,13 +84,13 @@ WantedBy=multi-user.target
 
 ## 收尾
 
-systemctl daemon-reload
+`systemctl daemon-reload`
 
-systemctl enable realm && systemctl start realm
+`systemctl enable realm && systemctl start realm`
 
 
 查看realm状态
-systemctl status realm
+`systemctl status realm`
 
 ## 参考文章
 
